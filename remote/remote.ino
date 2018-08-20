@@ -1,23 +1,31 @@
-
 #include <ESP8266WiFi.h>
 #include <ESP8266HTTPClient.h>
+#include <Keypad.h>
 
 // TODO:
 // - Scan network for Roku
-// - Support 4x4 Matrix Keyboard
 // - Low Battery indicator
 // - OTA?
 
 const char* ssid     = "YOUR_WIFI";
 const char* password = "WIFI_PASSWD";
+const char* rokuHost = "192.168.0.18";
 
 HTTPClient http;
-const int ledPin =  13;
-const int buttonUpPin = 2;
-const int buttonDownPin = 4;
 
-int buttonUpState = 0;
-int buttonDownState = 0;
+const int ledPin =  13;
+const byte ROWS = 4; //four rows
+const byte COLS = 4; //four columns
+char keys[ROWS][COLS] = {
+  {'1','2','3','A'},
+  {'4','5','6','B'},
+  {'7','8','9','C'},
+  {'*','0','#','D'}
+};
+byte rowPins[ROWS] = {A3, A2, A1, A0}; //connect to the row pinouts of the keypad - four in a row
+byte colPins[COLS] = {MOSI, SCK, A5, A4}; //connect to the column pinouts of the keypad - four in a row
+
+Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 
 void setup() {
   Serial.begin(115200);
@@ -53,13 +61,16 @@ void setup() {
 int value = 0;
 
 void loop() {
-  buttonUpState = digitalRead(buttonUpPin);
-  buttonDownState = digitalRead(buttonDownPin);
-  
-  if (buttonUpState == LOW) {
-    sendCommand("VolumeUp");
-  } else if (buttonDownState == LOW) {
-    sendCommand("VolumeDown");
+  char key = keypad.getKey();
+
+  if (key != NO_KEY){
+    Serial.println(key);
+    // TODO: Does Arduino support switches?
+    if (key == "2") {
+      sendCommand("VolumeUp");
+    } else if (key == "8") {
+      sendCommand("VolumeDown");
+    }
   }
 }
 
@@ -69,7 +80,7 @@ void sendCommand(String command) {
    delay(100);
    digitalWrite(ledPin, LOW);
    
-   String url = "http://192.168.0.18:8060/keypress/" + command;
+   String url = "http://" + rokuHost + ":8060/keypress/" + command;
    http.begin(url);
    http.POST("");
    http.end();

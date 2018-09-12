@@ -3,37 +3,36 @@
 #include <Keypad.h>
 
 // TODO:
+// - Implement modem sleep or deep sleep
 // - Scan network for Roku
-// - Low Battery indicator
-// - OTA?
+// - Detect Roku power status
 
-const char* ssid     = "YOUR_WIFI";
-const char* password = "WIFI_PASSWD";
-const char* rokuHost = "192.168.0.18";
+const char* ssid     = "SSID";
+const char* password = "PASSWORD";
+String rokuHost = "192.168.0.X";
 
 HTTPClient http;
 
-const int ledPin =  13;
-const byte ROWS = 4; //four rows
-const byte COLS = 4; //four columns
+const int ledPin = 0;
+const byte ROWS = 4;
+const byte COLS = 4;
 char keys[ROWS][COLS] = {
   {'1','2','3','A'},
   {'4','5','6','B'},
   {'7','8','9','C'},
   {'*','0','#','D'}
 };
-byte rowPins[ROWS] = {A3, A2, A1, A0}; //connect to the row pinouts of the keypad - four in a row
-byte colPins[COLS] = {MOSI, SCK, A5, A4}; //connect to the column pinouts of the keypad - four in a row
+byte rowPins[ROWS] = {13, 12, 14, 16}; // connect to the row pinouts of the keypad - four in a row
+byte colPins[COLS] = {5, 4, 2, 15}; // connect to the column pinouts of the keypad - four in a row
 
 Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
+int on = false;
 
 void setup() {
   Serial.begin(115200);
   delay(10);
 
   pinMode(ledPin, OUTPUT);
-  pinMode(buttonUpPin, INPUT_PULLUP);
-  pinMode(buttonDownPin, INPUT_PULLUP);
 
   Serial.println();
   Serial.println();
@@ -51,34 +50,68 @@ void setup() {
     Serial.print(".");
   }
 
-  digitalWrite(ledPin, HIGH);
+  blink();
   Serial.println("");
   Serial.println("WiFi connected");
   Serial.println("IP address: ");
   Serial.println(WiFi.localIP());
 }
 
-int value = 0;
+void blink() {
+  digitalWrite(ledPin, LOW); // High and Low and inverted for some reason
+  delay(100);
+  digitalWrite(ledPin, HIGH);
+}
 
 void loop() {
   char key = keypad.getKey();
 
   if (key != NO_KEY){
-    Serial.println(key);
-    // TODO: Does Arduino support switches?
-    if (key == "2") {
+    Serial.println("Key pressed"+ key);
+    if (key == '1') {
+      sendCommand("Back");
+    } else if (key == '2') {
+      sendCommand("Up");
+    } else if (key == '3') {
+      sendCommand("Home");
+    } else if (key == 'A') {
+      if (on) { // TODO: Get Roku power status from query/device-info
+        sendCommand("PowerOff");  
+      } else {
+        sendCommand("PowerOn");
+      }
+      on = !on;
+    } else if (key == '4') {
+      sendCommand("Left");
+    } else if (key == '5') {
+      sendCommand("Select");
+    } else if (key == '6') {
+      sendCommand("Right");
+    } else if (key == 'B') {
       sendCommand("VolumeUp");
-    } else if (key == "8") {
+    } else if (key == '7') {
+      sendCommand("InstantReplay");
+    } else if (key == '8') {
+      sendCommand("Down");
+    } else if (key == '9') {
+      sendCommand("Info");
+    } else if (key == 'C') {
       sendCommand("VolumeDown");
+    } else if (key == '*') {
+      sendCommand("Rev");
+    } else if (key == '0') {
+      sendCommand("Play");
+    } else if (key == '#') {
+      sendCommand("Fwd");
+    } else if (key == 'D') {
+      sendCommand("VolumeMute");
     }
   }
 }
 
 void sendCommand(String command) {
    Serial.println("Sending command " + command);
-   digitalWrite(ledPin, HIGH);
-   delay(100);
-   digitalWrite(ledPin, LOW);
+   blink();
    
    String url = "http://" + rokuHost + ":8060/keypress/" + command;
    http.begin(url);

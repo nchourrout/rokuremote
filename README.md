@@ -2,11 +2,11 @@
 
 ![That's one bulky TV remote](1.jpeg)
 
-My Roku remote has a infrared short range so I built a WiFi one using the [Roku External Control API](https://sdkdocs.roku.com/display/sdkdoc/External+Control+API) and the ESP8266.
+My Roku remote has a short short range so I built a WiFi one using the [Roku External Control API](https://sdkdocs.roku.com/display/sdkdoc/External+Control+API) and the ESP8266.
 
 ## Supplies
 
-![Parts](2.jpeg)
+![Parts](2.png)
   
 * [Plastic enclosure](https://www.adafruit.com/product/903)
 * [4x4 Matrix Keypad](https://www.adafruit.com/product/3844)
@@ -26,6 +26,6 @@ Not pictured:
 
 ## Assembly
 
-![Wiring Diagram](4.jpeg)
+![Wiring Diagram](4.png)
 ![Actual wiring](5.jpeg)
 

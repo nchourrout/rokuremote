@@ -6,7 +6,7 @@ My Roku remote has a short short range so I built a WiFi one using the [Roku Ext
 
 ## Supplies
 
-![Parts](2.png)
+![Parts](3.jpeg)
   
 * [Plastic enclosure](https://www.adafruit.com/product/903)
 * [4x4 Matrix Keypad](https://www.adafruit.com/product/3844)
@@ -27,5 +27,6 @@ Not pictured:
 ## Assembly
 
 ![Wiring Diagram](4.png)
+
 ![Actual wiring](5.jpeg)
 

@@ -2,7 +2,7 @@
 
 ![That's one bulky TV remote](1.jpeg)
 
-My Roku remote has a short short range so I built a WiFi one using the [Roku External Control API](https://sdkdocs.roku.com/display/sdkdoc/External+Control+API) and the ESP8266.
+My Roku remote has a short infrared range so I built a WiFi version using the [Roku External Control API](https://sdkdocs.roku.com/display/sdkdoc/External+Control+API) and a ESP8266.
 
 ## Supplies
 

@@ -23,7 +23,7 @@ char keys[ROWS][COLS] = {
   {'*','0','#','D'}
 };
 byte rowPins[ROWS] = {13, 12, 14, 16}; // connect to the row pinouts of the keypad - four in a row
-byte colPins[COLS] = {5, 4, 2, 15}; // connect to the column pinouts of the keypad - four in a row
+byte colPins[COLS] = {15, 2, 4, 5}; // connect to the column pinouts of the keypad - four in a row
 
 Keypad keypad = Keypad( makeKeymap(keys), rowPins, colPins, ROWS, COLS );
 int on = false;
